@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Soenneker.Dtos.HttpClientOptions;
@@ -12,7 +13,9 @@ public sealed class XHttpClient : IXHttpClient
 {
     private readonly IHttpClientCache _httpClientCache;
 
-    private const string _prodBaseUrl = "https://api.twitter.com/2/";
+    private const string _clientId = nameof(XHttpClient);
+
+    private static readonly Uri _prodBaseUri = new("https://api.twitter.com/2/", UriKind.Absolute);
 
     public XHttpClient(IHttpClientCache httpClientCache)
     {
@@ -21,23 +24,20 @@ public sealed class XHttpClient : IXHttpClient
 
     public ValueTask<HttpClient> Get(CancellationToken cancellationToken = default)
     {
-        return _httpClientCache.Get(nameof(XHttpClient), () =>
+        // No closure: state passed explicitly + static lambda
+        return _httpClientCache.Get(_clientId, _prodBaseUri, static baseUri => new HttpClientOptions
         {
-            var options = new HttpClientOptions
-            {
-                BaseAddress = _prodBaseUrl
-            };
-            return options;
-        }, cancellationToken: cancellationToken);
+            BaseAddress = baseUri
+        }, cancellationToken);
     }
 
     public void Dispose()
     {
-        _httpClientCache.RemoveSync(nameof(XHttpClient));
+        _httpClientCache.RemoveSync(_clientId);
     }
 
     public ValueTask DisposeAsync()
     {
-        return _httpClientCache.Remove(nameof(XHttpClient));
+        return _httpClientCache.Remove(_clientId);
     }
 }
