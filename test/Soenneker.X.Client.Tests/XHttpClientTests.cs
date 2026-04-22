@@ -1,20 +1,19 @@
-﻿using Soenneker.X.Client.Abstract;
-using Soenneker.Tests.FixturedUnit;
-using Xunit;
+using Soenneker.X.Client.Abstract;
+using Soenneker.Tests.HostedUnit;
 
 namespace Soenneker.X.Client.Tests;
 
-[Collection("Collection")]
-public sealed class XHttpClientTests : FixturedUnitTest
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
+public sealed class XHttpClientTests : HostedUnitTest
 {
     private readonly IXHttpClient _httpclient;
 
-    public XHttpClientTests(Fixture fixture, ITestOutputHelper output) : base(fixture, output)
+    public XHttpClientTests(Host host) : base(host)
     {
         _httpclient = Resolve<IXHttpClient>(true);
     }
 
-    [Fact]
+    [Test]
     public void Default()
     {
 
