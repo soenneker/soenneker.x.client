@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <Description>A .NET thread-safe singleton HttpClient for X (twitter)</Description>
+        <Description>Provides a cached HttpClient configured for X API v2 requests.</Description>
         <Version Condition="'$(BUILD_VERSION)' == ''">4.0.0</Version>
         <Version Condition="'$(BUILD_VERSION)' != ''">$(BUILD_VERSION)</Version>
         <AssemblyName>Soenneker.X.Client</AssemblyName>

@@ -6,12 +6,12 @@ using Soenneker.Utils.HttpClientCache.Registrar;
 namespace Soenneker.X.Client.Registrars;
 
 /// <summary>
-/// A .NET thread-safe singleton HttpClient for GitHub
+/// Registers the X API v2 HTTP client provider.
 /// </summary>
 public static class XHttpClientRegistrar
 {
     /// <summary>
-    /// Adds <see cref="XHttpClient"/> as a singleton service. <para/>
+    /// Adds the X HTTP client provider as a singleton service.
     /// </summary>
     public static IServiceCollection AddXHttpClientAsSingleton(this IServiceCollection services)
     {
@@ -22,7 +22,7 @@ public static class XHttpClientRegistrar
     }
 
     /// <summary>
-    /// Adds <see cref="XHttpClient"/> as a scoped service. <para/>
+    /// Adds the X HTTP client provider as a scoped service.
     /// </summary>
     public static IServiceCollection AddXHttpClientAsScoped(this IServiceCollection services)
     {

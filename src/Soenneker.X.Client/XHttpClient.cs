@@ -13,9 +13,9 @@ public sealed class XHttpClient : IXHttpClient
 {
     private readonly IHttpClientCache _httpClientCache;
 
-    private const string _clientId = nameof(XHttpClient);
+    private readonly string _clientId = $"{nameof(XHttpClient)}-{Guid.NewGuid():N}";
 
-    private static readonly Uri _prodBaseUri = new("https://api.twitter.com/2/", UriKind.Absolute);
+    private static readonly Uri _prodBaseUri = new("https://api.x.com/2/", UriKind.Absolute);
 
     public XHttpClient(IHttpClientCache httpClientCache)
     {
@@ -24,25 +24,17 @@ public sealed class XHttpClient : IXHttpClient
 
     public ValueTask<HttpClient> Get(CancellationToken cancellationToken = default)
     {
-        // No closure: state passed explicitly + static lambda
         return _httpClientCache.Get(_clientId, _prodBaseUri, static baseUri => new HttpClientOptions
         {
             BaseAddress = baseUri
         }, cancellationToken);
     }
 
-    /// <summary>
-    /// Releases resources used by the current instance.
-    /// </summary>
     public void Dispose()
     {
         _httpClientCache.RemoveSync(_clientId);
     }
 
-    /// <summary>
-    /// Asynchronously releases resources used by the current instance.
-    /// </summary>
-    /// <returns>A task that represents the asynchronous operation.</returns>
     public ValueTask DisposeAsync()
     {
         return _httpClientCache.Remove(_clientId);
